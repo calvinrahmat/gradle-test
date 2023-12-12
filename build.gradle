@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = 'com.example' // Replace with your actual group ID
+
+dependencies {
+    implementation 'org.apache.commons:commons-lang3:3.12.0' // Just an example dependency
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url = uri('http://nexusdemo.izenoondemand.com:8081/repository/maven-bni/')
+            allowInsecureProtocol = true // Allow insecure HTTP protocol
+
+            credentials {
+                username = project.findProperty("nexusUsername") ?: System.getenv("NEXUS_USERNAME")
+                password = project.findProperty("nexusPassword") ?: System.getenv("NEXUS_PASSWORD")
+            }
+        }
+    }
+}
+
